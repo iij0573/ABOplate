@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>index</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <style media="screen">
+      #dm_ul{min-width: 300px; background-color: navy; text-align: center;}
+        .dropmenu ul ul{position: absolute; display: none;}
+        .dropmenu ul ul li{display: block; background-color: navy; color: white;}
+      .dropmenu ul li{display: inline-block; margin-left: -5.5px;}
+      .dropmenu ul li a{display: block; width: 500px; color: white; line-height: 43px;
+        text-decoration: none;}
+      .dropmenu ul li a:hover{background-color: navy; color: blue;}
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>웹앱콘텐츠디자인</p>
+    </header>
+    <section>
+    <div class="dropmenu">
+      <ul id="dm_ul">
+        <li><a href="#">센터소개</a>
+          <ul>
+            <li>
+            	<div class="d-flex" style="align:left;">
+            		<a href="storeInfoBefore.jsp">
+            			<img src="images/image_1.jpg" style="width:100px;"></img>aaaa
+            		</a>
+            	</div>
+            </li>
+            <li>
+            	<div class="d-flex">
+            		<a href="storeInfoBefore.jsp">
+            			<img src="images/image_2.jpg" style="width:100px;"></img>bbbb
+            		</a>
+            	</div>
+            </li>
+            <li>
+            	<div class="d-flex">
+            		<a href="storeInfoBefore.jsp">
+            			<img src="images/image_3.jpg" style="width:100px;"></img>cccc
+            		</a>
+            	</div>
+            </li>
+            <li>
+            	<div class="d-flex">
+            		<a href="storeInfoBefore.jsp">
+            			<img src="images/image_4.jpg" style="width:100px;"></img>dddd
+            		</a>
+            	</div>
+            </li>
+          </ul>
+    <a href="#" class="d-flex">교육과정</a>
+    <a href="#" class="d-flex">입학안내</a>
+    <a href="#" class="d-flex">캠퍼스생활</a>
+      </ul>
+    </div>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <script type="text/javascript">
+      $(".dropmenu ul li").hover(function(){
+        $(this).find("ul").stop().fadeToggle(300);
+      });
+    </script>
+
+  </body>
+</html>

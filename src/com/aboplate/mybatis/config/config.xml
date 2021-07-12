@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="com.aboplate.app.member.dao.MemberBean" alias="memberBean"/>
+		<typeAlias type="com.aboplate.app.restaurant.dao.RestaurantBean" alias="restaurantBean"/>
+		<typeAlias type="com.aboplate.app.restaurant.dao.ReviewBean" alias="reviewBean"/>
+		<typeAlias type="com.aboplate.app.bookmark.dao.BookmarkBean" alias="bookmarkBean"/>
+		<typeAlias type="com.aboplate.app.picture.dao.PictureBean" alias="pictureBean"/>
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="oracle.jdbc.OracleDriver"/>
+				<property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+				<property name="username" value="hr"/>
+				<property name="password" value="hr"/>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="com/aboplate/sql/member.xml"/>
+		<mapper resource="com/aboplate/sql/restaurant.xml"/>
+		<mapper resource="com/aboplate/sql/review.xml"/>
+		<mapper resource="com/aboplate/sql/bookmark.xml"/>
+		<mapper resource="com/aboplate/sql/picture.xml"/>
+	</mappers>
+</configuration>

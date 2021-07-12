@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+
+	<!--
+		bean객체로 받아서 각각 컬럼에 값 넣어줌
+		1이면 성공 0이면 실패
+	 -->
+	<insert id="join" parameterType="memberBean" >
+	INSERT INTO MEMBER
+	(MEMBER_ID, MEMBER_NAME, MEMBER_EMAIL, MEMBER_PASSWORD, MEMBER_NICKNAME, MEMBER_PREFERENCE_FOOD, MEMBER_REGION)
+	VALUES(
+	#{member_id}, #{member_name}, #{member_email}, #{member_password}, #{member_nickname}, #{member_preference_food}, #{member_region}
+	)
+	</insert>
+
+	<!--
+		map객체로 받아서 db에 있는지 확인 map 객체 리턴
+	 -->
+	<select id="login" parameterType="map" resultType="memberBean">
+		SELECT MEMBER_ID, MEMBER_TYPE, MEMBER_NICKNAME, MEMBER_STAMP FROM MEMBER
+		WHERE MEMBER_ID = #{id} AND MEMBER_PASSWORD = #{password}
+	</select>
+
+	<!--
+		map객체로 받아서 db에 있는지 확인해서 아이디값이 있으면 리턴
+	 -->
+	<select id="findId" parameterType="map" resultType="string">
+		SELECT MEMBER_ID FROM MEMBER WHERE MEMBER_EMAIL = #{email} AND MEMBER_NAME = #{name}
+	</select>
+
+	<!--
+		map객체로 받아서 db에 있는지 확인해서 1이면 성공 0이면 실패
+	 -->
+	<update id="updatePw" parameterType="map">
+		UPDATE MEMBER SET
+		MEMBER_PASSWORD = #{new_pw}
+		WHERE MEMBER_ID = #{id}
+	</update>
+
+	<select id="checkId" parameterType="string" resultType="_int">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE MEMBER_ID = #{id}
+	</select>
+
+	<select id="checkEmail" parameterType="string" resultType="_int">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE MEMBER_EMAIL = #{email}
+	</select>
+	
+	<select id="checkNickname" parameterType="string" resultType="_int">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE MEMBER_NICKNAME = #{nickname}
+	</select>	
+
+	<update id="recommendStamp" parameterType="string">
+		UPDATE MEMBER
+		SET MEMBER_STAMP = MEMBER_STAMP + 10
+		WHERE MEMBER_ID = #{id}
+	</update>
+	
+	<insert id="joinSns" parameterType="map">
+		INSERT INTO MEMBER
+		(MEMBER_ID, MEMBER_NICKNAME, MEMBER_TYPE)
+		VALUES(#{snsId}, #{nickName}, 2)
+	</insert>
+	
+	<delete id="deleteMember" parameterType="string">
+		DELETE FROM MEMBER WHERE MEMBER_ID = #{id}
+	</delete>
+	
+	<select id="getMemerInfo" parameterType="string" resultType="memberBean">	
+		SELECT * FROM MEMBER WHERE MEMBER_ID = #{id}
+	</select>
+	
+	<select id="getJoinList" parameterType="string" resultType="memberBean">
+		SELECT MEMBER_PREFERENCE_FOOD, MEMBER_REGION FROM MEMBER
+		WHERE MEMBER_ID = #{session_id}
+	</select>
+	
+	<select id="getFoodCategory" parameterType="string" resultType="string">
+		SELECT MEMBER_PREFERENCE_FOOD FROM MEMBER WHERE MEMBER_ID = #{id}
+	</select>
+	
+	<select id="getMemberNickname" parameterType="string" resultType="string">
+		SELECT MEMBER_NICKNAME FROM MEMBER WHERE MEMBER_ID = #{id}
+	</select>
+	
+	<update id="updateMemberinfo" parameterType="memberBean">
+		UPDATE MEMBER
+		SET MEMBER_PASSWORD = #{member_password},
+			MEMBER_PREFERENCE_FOOD = #{member_preference_food},
+			MEMBER_REGION = #{member_region}
+		WHERE MEMBER_ID = #{member_id}	
+	</update>
+
+</mapper>

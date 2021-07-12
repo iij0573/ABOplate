@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <button onClick="javascript:goDetail('테스트');">팝업</button>
+    <div style="height:1000px;"> </div>
+
+    <div id="mask"></div>
+
+    <!--Popup Start -->
+    <div id="layerbox" class="layerpop"
+        style="width: 700px; height: 700px;">
+        <article class="layerpop_area">
+        <div class="title">레이어팝업 타이틀</div>
+        <a href="javascript:popupClose();" class="layerpop_close" id="layerbox_close">X</a><br>
+        <div class="content">
+			        레이어 팝업 내용<br/>
+			        레이어 팝업 내용<br/>
+			        레이어 팝업 내용<br/>
+			        레이어 팝업 내용<br/>
+			        레이어 팝업 내용<br/>
+			        레이어 팝업 내용<br/>
+			        레이어 팝업 내용<br/>
+			        레이어 팝업 내용<br/>
+        </div>
+        </article>
+    </div>
+
+</body>
+<script src="js/popup.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+</html>

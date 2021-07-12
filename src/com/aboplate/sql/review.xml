@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Review">
+
+<select id="getReviewList" parameterType="map" resultType="reviewBean">
+		SELECT * FROM
+			(SELECT ROWNUM R, V.* FROM
+				(SELECT * FROM REVIEW WHERE RESTAURANT_NUM = ${restaurantNum}
+					ORDER BY REVIEW_NUM DESC) V ) L
+			WHERE L.R BETWEEN ${startRow} AND ${endRow}
+	</select>
+
+	<select id="getReviewCnt" parameterType="_int" resultType="_int">
+		SELECT COUNT(*) FROM REVIEW
+			WHERE RESTAURANT_NUM = ${restaurantNum}
+	</select>
+
+	<delete id="deleteOneReview" parameterType="_int">
+		DELETE FROM REVIEW WHERE REVIEW_NUM = ${reviewNum}
+	</delete>
+
+	<insert id="insertReview" parameterType="reviewBean">
+		INSERT INTO REVIEW
+			(REVIEW_NUM, RESTAURANT_NUM, MEMBER_NICKNAME, REVIEW, REVIEW_RATION, REVIEW_UPLOAD_DATE)
+			VALUES(REVIEW_SEQ.NEXTVAL, #{restaurant_num}, #{member_nickname}, #{review}, #{review_ration}, SYSDATE)
+	</insert>
+
+	<select id="checkReviewRecommend" parameterType="map" resultType="_int">
+		SELECT COUNT(*) FROM REVIEW_RECOMMEND WHERE REFERRER_ID = #{id} AND REVIEW_NUM = ${reviewNum}
+	</select>
+
+	<delete id="popReviewRecommend" parameterType="map">
+		DELETE FROM REVIEW_RECOMMEND WHERE REFERRER_ID = #{id} AND REVIEW_NUM = ${reviewNum}
+	</delete>
+
+	<insert id="addReviewRecommend" parameterType="map">
+	 	INSERT INTO REVIEW_RECOMMEND 
+	 	VALUES(${reviewNum}, #{id})
+	</insert>
+
+	<select id="getReviewDetail" parameterType="_int" resultType="reviewBean">
+		SELECT * FROM REVIEW WHERE REVIEW_NUM = ${reviewNum}
+	</select>
+
+	<update id="updateReview" parameterType="reviewBean">
+		UPDATE REVIEW
+      	SET REVIEW = #{review}, REVIEW_RATION = ${review_ration}
+      	WHERE REVIEW_NUM = ${review_num}
+	</update>
+
+	<select id="getMemberReviewCnt" parameterType="string" resultType="_int">
+		SELECT COUNT(*) FROM REVIEW WHERE MEMBER_NICKNAME = #{nickname}
+	</select>
+
+	<select id="getMemberReviewList" parameterType="map" resultType="reviewBean">
+		SELECT * FROM
+			(SELECT ROWNUM R, V.* FROM
+				(SELECT * FROM REVIEW WHERE MEMBER_NICKNAME = #{nickname}
+					ORDER BY REVIEW_NUM DESC) V ) L
+			WHERE L.R BETWEEN ${startRow} AND ${endRow}
+	</select>
+	
+	<update id="updateReviewStamp" parameterType="string">
+		UPDATE MEMBER
+		SET MEMBER_STAMP = MEMBER_STAMP + 5
+		WHERE MEMBER_ID = #{id}
+	</update>
+	
+	<update id="minusReviewStamp" parameterType="string">
+		UPDATE MEMBER
+		SET MEMBER_STAMP = MEMBER_STAMP - 5 
+		WHERE MEMBER_ID = #{id}
+	</update>
+	
+	<update id="minusRecommend" parameterType="_int">
+		UPDATE REVIEW
+		SET REVIEW_RECOMMEND = REVIEW_RECOMMEND - 1
+		WHERE REVIEW_NUM = ${reviewNum}
+	</update>
+	
+	<update id="plusRecommend" parameterType="_int">
+		UPDATE REVIEW
+		SET REVIEW_RECOMMEND = REVIEW_RECOMMEND + 1 
+		WHERE REVIEW_NUM = ${reviewNum}
+	</update>
+	
+	<select id="checkReviewNotify" parameterType="map" resultType="_int">
+		SELECT COUNT(*) FROM REVIEW_REPORT 
+			WHERE REVIEW_NUM = ${reviewNum} AND DECLARATION_ID = #{id}
+	</select>
+	
+	<delete id="popReviewNotify" parameterType="map">
+		DELETE FROM REVIEW_REPORT 
+			WHERE REVIEW_NUM = ${reviewNum} AND DECLARATION_ID = #{id}
+	</delete>
+	
+	<insert id="addReviewNotify" parameterType="map">
+		INSERT INTO REVIEW_REPORT
+		VALUES(${reviewNum}, #{id})
+	</insert>
+	
+	<update id="minusNotify" parameterType="_int">
+		UPDATE REVIEW
+		SET REVIEW_REPORT = REVIEW_REPORT - 1 
+		WHERE REVIEW_NUM = ${reviewNum}
+	</update>
+	
+	<update id="plusNotify" parameterType="_int">
+		UPDATE REVIEW
+		SET REVIEW_REPORT = REVIEW_REPORT + 1
+		WHERE REVIEW_NUM = ${reviewNum}
+	</update>
+	
+	
+
+
+</mapper>

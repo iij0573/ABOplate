@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Restaurant">
+
+	<select id="getNameList" resultType="string"
+		parameterType="string">
+		SELECT DISTINCT RESTAURANT_NAME FROM RESTAURANT
+		WHERE RESTAURANT_NAME LIKE '%'||#{search}||'%'
+	</select>
+
+	<select id="getFoodCategoryList" parameterType="string"
+		resultType="string">
+		SELECT DISTINCT RESTAURANT_FOOD_CATEGORY FROM RESTAURANT
+		WHERE RESTAURANT_FOOD_CATEGORY LIKE '%'||#{search}||'%'
+	</select>
+
+	<select id="getLocalCurrencyList" parameterType="string"
+		resultType="string">
+		SELECT DISTINCT RESTAURANT_NAME FROM RESTAURANT
+		WHERE RESTAURANT_LOCAL_CURRENCY = 'O' AND RESTAURANT_NAME LIKE '%'
+	</select>
+
+	<select id="getBestRestaurantList" resultType="string"
+		parameterType="string">
+		SELECT DISTINCT RESTAURANT_NAME FROM RESTAURANT WHERE
+		RESTAURANT_BEST = 'O'
+		AND AND RESTAURANT_NAME LIKE '%'||#{search}||'%'
+	</select>
+
+
+	<select id="getAddressList" resultType="string"
+		parameterType="string">
+		SELECT DISTINCT SUBSTR(RESTAURANT_ADDRESS, 1,
+		INSTR(RESTAURANT_ADDRESS, ' ', 1, 1)) FROM RESTAURANT
+		WHERE RESTAURANT_ADDRESS LIKE '%'||#{search}||'%'
+	</select>
+
+	<select id="getMemberChoiceRestaurantList" parameterType="map"
+		resultType="restaurantBean">
+		SELECT RESTAURANT_NUM, RESTAURANT_NAME,
+		RESTAURANT_RATION_TOTAL,
+		RESTAURANT_ADDRESS, RESTAURANT_HIT FROM RESTAURANT
+		WHERE RESTAURANT_ADDRESS_ROAD LIKE
+		'%'||#{address}||'%'
+		AND RESTAURANT_FOOD_CATEGORY = #{category}
+		ORDER BY
+		RESTAURANT_RATION_TOTAL DESC
+	</select>
+
+	<select id="getPopularRestaurant" resultType="restaurantBean">
+		SELECT
+		RESTAURANT_NUM, RESTAURANT_NAME, RESTAURANT_RATION_TOTAL,
+		RESTAURANT_ADDRESS, RESTAURANT_HIT FROM RESTAURANT
+		WHERE
+		RESTAURANT_RATION_TOTAL >= 3.5
+	</select>
+
+	<select id="searchRestaurant" parameterType="map"
+		resultType="restaurantBean">
+		SELECT RESTAURANT_NUM, RESTAURANT_NAME,
+		RESTAURANT_RATION_TOTAL,
+		RESTAURANT_ADDRESS, RESTAURANT_HIT FROM
+		RESTAURANT
+		WHERE ${keyField} LIKE '%'||#{keyWord}||'%'
+		ORDER BY
+		RESTAURANT_RATION_TOTAL DESC
+	</select>
+
+	<select id="getRestaurantInfo" parameterType="_int"
+		resultType="restaurantBean">
+		SELECT * FROM RESTAURANT WHERE RESTAURANT_NUM = ${num}
+	</select>
+
+	<select id="getLocalCurrencyCnt" resultType="_int">
+		SELECT COUNT(*) FROM
+		RESTAURANT WHERE RESTAURANT_LOCAL_CURRENCY = 'O'
+	</select>
+
+	<select id="getReviewSeq" resultType="_int">
+		SELECT REVIEW_SEQ.CURRVAL
+		FROM DUAL
+	</select>
+
+	<update id="updateReadCount" parameterType="_int">
+		UPDATE RESTAURANT
+		SET
+		RESTAURANT_HIT = RESTAURANT_HIT + 1 WHERE RESTAURANT_NUM = ${num}
+	</update>
+
+	<select id="getLocalCurrencyRestaurantList"
+		resultType="restaurantBean">
+		SELECT * FROM
+		(SELECT ROWNUM R, D.* FROM
+		(SELECT * FROM RESTAURANT WHERE RESTAURANT_LOCAL_CURRENCY = 'O' ORDER BY RESTAURANT_RATION_TOTAL DESC) D) B
+		WHERE B.R BETWEEN ${startRow} AND ${endRow}
+	</select>
+	
+	<select id="list" parameterType="map" resultType="restaurantBean">
+	SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM 
+				(SELECT * FROM RESTAURANT ORDER BY RESTAURANT_HIT DESC) D) B
+				WHERE B.R BETWEEN 0 AND 1000
+	</select>
+
+
+</mapper>

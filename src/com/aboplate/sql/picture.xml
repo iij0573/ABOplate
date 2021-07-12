@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Picture">
+	
+	<select id="getPictureDetail" parameterType="_int" resultType="pictureBean">
+		SELECT * FROM PICTURE WHERE REVIEW_NUM = ${reviewNum}
+	</select>
+	
+	<insert id="insertPicture" parameterType="map">
+		INSERT INTO PICTURE
+		VALUES(${reviewNum}, #{picturePath})
+	</insert>
+	
+	<delete id="deletePicture" parameterType="_int">
+		DELETE FROM PICTURE WHERE REVIEW_NUM = ${reviewNum}
+	</delete>
+	
+	<select id="getPictureList" parameterType="map" resultType="PictureBean">
+      SELECT * FROM
+      	(SELECT ROWNUM R, V.* FROM
+           (SELECT * FROM PICTURE WHERE REVIEW_NUM IN (
+       <foreach collection="reviewNum" item="num" separator=",">
+           ${num}
+       </foreach>    
+           )) V) L
+      WHERE L.R BETWEEN 1 AND 4
+   </select>
+   
+   
+   <select id="getReviewNumList" parameterType="_int" resultType="_int">
+      SELECT REVIEW_NUM FROM REVIEW
+      WHERE RESTAURANT_NUM = ${restaurantNum}
+      ORDER BY REVIEW_NUM DESC
+   </select>
+	
+</mapper>

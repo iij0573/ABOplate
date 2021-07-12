@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Bookmark">
+
+<select id="getBookmarkList" parameterType="map" resultType="restaurantBean">
+      SELECT * FROM
+      	(SELECT ROWNUM R, V.* FROM
+           (SELECT * FROM RESTAURANT WHERE RESTAURANT_NUM IN (
+       <foreach collection="restaurantNum" item="num" separator=",">
+           ${num}
+       </foreach>    
+           )) V) L
+      WHERE L.R BETWEEN ${startRow} AND ${endRow}
+   </select>
+   
+   <select id="getRestaurantNumList" parameterType="string" resultType="_int">
+      SELECT RESTAURANT_NUM FROM BOOKMARK
+      WHERE MEMBER_ID = #{sessionId}
+      ORDER BY BOOKMARK_NUM DESC
+   </select>
+
+   <select id="getBookmarkCnt" parameterType="string" resultType="_int">
+      SELECT COUNT(*) FROM BOOKMARK WHERE MEMBER_ID = #{memberId}
+   </select>
+
+   <select id="checkBookmark" parameterType="map" resultType="_int">
+      SELECT COUNT(*) FROM BOOKMARK
+      WHERE MEMBER_ID = #{id} AND RESTAURANT_NUM = ${restaurantNum}
+   </select>
+
+   <delete id="popBookmark" parameterType="map">
+      DELETE FROM BOOKMARK
+      WHERE MEMBER_ID = #{id} AND RESTAURANT_NUM = ${restaurantNum}
+   </delete>
+
+   <insert id="addBookmark" parameterType="map">
+      INSERT INTO BOOKMARK
+      VALUES(
+      bookmark_seq.NEXTVAL, #{id}, ${restaurantNum})
+   </insert>
+
+
+</mapper>
+
